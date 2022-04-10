@@ -18,5 +18,21 @@ export function captureTheFlag() {
     // Manage towers
     captureTheFlagTowers(myCreeps, enemyCreeps, myFlag, enemyFlag, myTowers, enemyTowers);
 
+    // Establish pairs
+    pairUp(myCreeps);
+
     return creepTactic.testing();
+}
+
+function pairUp(creeps) {
+    let unassignedHealers = creeps.filter((c) => c.body.some((b) => b.type === HEAL) && (!c.assignedRanger || !util.getObjectById(c.assignedRanger)));
+    let lonelyRangers = creeps.filter((c) => c.body.some((b) => b.type === RANGED_ATTACK) && !c.assignedHealer || !util.getObjectById(c.assignedHealer));
+    // Healers find rangers
+    if (unassignedHealers.length) {
+
+    } else
+    // Orphan rangers look for already assigned healers to tag with
+    if (lonelyRangers.length) {
+        let closestHealer = creeps.filter((c) => c.body.some((b) => b.type === HEAL));
+    }
 }
