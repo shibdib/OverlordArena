@@ -1,4 +1,5 @@
 'use strict'
 
-export function testing() {
+export function creepMove() {
+
 }
