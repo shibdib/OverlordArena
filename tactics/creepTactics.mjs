@@ -85,7 +85,7 @@ Creep.prototype.healInRange = function () {
 Creep.prototype.guardLocation = function (location, guardRange = 4) {
     this.guardSpot = location;
     let enemyCreeps = util.findInRange(location, util.getObjectsByPrototype(Creep).filter(c => !c.my), guardRange);
-    if (enemyCreeps.length) this.moveTo(util.findClosestByRange(location, enemyCreeps), {range: 0}); else {
+    if (enemyCreeps.length) this.moveTo(util.findClosestByRange(location, enemyCreeps)); else {
         return this.moveTo(location);
     }
 };
