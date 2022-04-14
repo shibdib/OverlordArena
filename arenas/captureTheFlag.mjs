@@ -5,6 +5,7 @@ import * as util from '/game/utils';
 import * as prototype from '/game/prototypes';
 import * as arena from '/arena/prototypes';
 import * as constants from '/game/constants';
+import * as creepPrototypes from '../tactics/creepTactics.mjs'
 
 let flagLocation;
 export function captureTheFlag() {
