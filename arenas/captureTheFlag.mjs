@@ -143,12 +143,14 @@ function teamTactics(myCreeps, enemyCreeps, myFlag, enemyFlag, myTowers, enemyTo
         c.guardLocation(phaseLocations[roundPhase][flagLocation][0], 8);
         c.attackInRange();
         c.healInRange();
+        if (c.getRangeTo(enemyFlag) <= 5) c.moveTo(enemyFlag, {range: 0});
     });
     // Team 2
     teamTwo.forEach(function (c) {
         c.guardLocation(phaseLocations[roundPhase][flagLocation][1], 8);
         c.attackInRange();
         c.healInRange();
+        if (c.getRangeTo(enemyFlag) <= 5) c.moveTo(enemyFlag, {range: 0});
     });
     // Healers
     healers.forEach(function (c) {
