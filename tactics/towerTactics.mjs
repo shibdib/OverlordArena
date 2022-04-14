@@ -10,36 +10,24 @@ export function captureTheFlagTowers(myCreeps, enemyCreeps, myFlag, enemyFlag, m
         // Filter range
         myCreeps = myCreeps.filter((c) => tower.getRangeTo(c) <= constants.TOWER_RANGE);
         enemyCreeps = enemyCreeps.filter((c) => tower.getRangeTo(c) <= constants.TOWER_RANGE);
+        let wounded = myCreeps.filter((c) => c.hits < c.hitsMax && tower.getRangeTo(c) <= constants.TOWER_RANGE);
 
-        // Handle low energy, only defend against high threats unless everyone is far away
-        let threateningEnemies = myFlag.findInRange(enemyCreeps, 4);
-        if (tower.store.energy < constants.TOWER_ENERGY_COST * 2) {
-            if (threateningEnemies.length) {
-                tower.attack(myFlag.findClosestByPath(threateningEnemies));
-            } else if (myFlag.findInRange(enemyCreeps, constants.TOWER_RANGE * 0.5).length) {
-                return;
-            }
+        // Always Defend otherwise try to heal
+        let threateningEnemies = myFlag.findInRange(enemyCreeps, 6);
+        if (threateningEnemies.length) {
+            tower.attack(myFlag.findClosestByPath(threateningEnemies));
+            continue;
+        } else if (tower.store.energy > constants.TOWER_ENERGY_COST * 2 && wounded.length) {
+            let healOrder = wounded.filter((c) => c.body.some((b) => b.type === constants.HEAL)) || wounded;
+            tower.heal(tower.findClosestByRange(healOrder));
+            continue;
         }
-
-        // Always Defend
-        if (threateningEnemies.length) tower.attack(myFlag.findClosestByPath(threateningEnemies));
 
         // Headshot when possible
         let killableEnemy = enemyCreeps.find((c) => c.hits < determineDamage(tower.getRangeTo(c)));
-        if (killableEnemy) return tower.attack(killableEnemy);
-
-        // Heal if needed
-        let wounded = myCreeps.filter((c) => c.hits < c.hitsMax);
-        if (wounded.length) return tower.heal(tower.findClosestByRange(wounded));
-
-        // Attack vulnerable
-        let noHealers = enemyCreeps.filter((c) => !c.findInRange(enemyCreeps.filter((e) => e.body.some((b) => b.type === HEAL), 3)).length);
-        if (noHealers.length) return tower.attack(tower.findClosestByRange(noHealers));
-
-        // Can damage
-        /**
-        let damageable = enemyCreeps.filter((c) => !c.findInRange(c, enemyCreeps.filter((e) => !e.body.includes('HEAL')), 3)[0]);
-        if (damageable.length) return tower.attack(tower.findClosestByRange(damageable));**/
+        if (killableEnemy) {
+            tower.attack(killableEnemy);
+        }
     }
 }
 
