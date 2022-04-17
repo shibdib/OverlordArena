@@ -50,7 +50,7 @@ Creep.prototype.attackInRange = function () {
                 return a.hits - b.hits;
             })[0];
             this.attack(lowHealth);
-            let lowHealthFriends = lowHealth.findInRange(enemyCreeps, 2);
+            let lowHealthFriends = lowHealth.findInRange(enemyCreeps, 1);
             if (lowHealthFriends.length < 3) this.moveTo(lowHealth, {range: 0});
             {
                 this.moveTo(lowHealthFriends, {flee: true, range: 5});
